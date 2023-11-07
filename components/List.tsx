@@ -3,36 +3,25 @@ import React, { useEffect, useState } from "react";
 import { Text, View, FlatList, Image, TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
 import { maxChars } from "../utils/textFunctions";
+import { getMoviesPopular } from "../utils/handleApi";
+
 const List = () => {
   const [movies, setMovies] = useState([]);
   const [time, setTime] = useState("day");
 
   const getMovies = async () => {
-    const key = process.env.EXPO_PUBLIC_API_KEY;
-    const access_token = process.env.EXPO_PUBLIC_ACCESS_TOKEN;
-
-    const options = {
-      method: "GET",
-      url: `https://api.themoviedb.org/3/trending/all/${time}`,
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    };
-
-    try {
-      const response = await axios.request(options);
-      //   console.log(response.data);
-      setMovies(response.data.results);
-    } catch (error) {
-      console.error(error);
-    }
+    getMoviesPopular().then((res) => {
+      setMovies(res.data.results);
+    });
   };
   useEffect(() => {
     getMovies();
-  }, [time]);
+  }, []);
   return (
-    <View>
-      <ButtonsTime time={time} setTime={setTime} />
+    <View style={styles.list_container}>
+      <Text style={styles.title}>Popular Movies</Text>
+      {/* <ButtonsTime time={time} setTime={setTime} /> */}
+
       <FlatList
         data={movies}
         renderItem={({ item, index }) => <CardItem key={index} item={item} />}
@@ -44,8 +33,18 @@ const List = () => {
 };
 export default List;
 const styles = StyleSheet.create({
+  list_container: {},
   list: {
-    paddingHorizontal: 10,
+    marginTop: 10,
+    marginHorizontal: 10,
+  },
+  title: {
+    color: "white",
+    fontSize: 20,
+    fontWeight: "bold",
+    marginLeft: 10,
+    marginTop: 10,
+    marginBottom: 10,
   },
   buttons: {
     flexDirection: "row",
@@ -93,10 +92,12 @@ const CardItem = ({ item }) => {
       />
       <View style={stylesCardItem.content}>
         <Text style={stylesCardItem.title}>{item.title || item.name}</Text>
-        <Text>{item.vote_average}</Text>
-        <Text>{item.release_date}</Text>
+        <View style={stylesCardItem.row}>
+          <Text style={stylesCardItem.text}>{item.vote_average}</Text>
+          <Text style={stylesCardItem.text}>{item.release_date}</Text>
+        </View>
 
-        <Text>{maxChars(item.overview, 100)}</Text>
+        <Text style={stylesCardItem.text}>{maxChars(item.overview, 120)}</Text>
       </View>
     </View>
   );
@@ -111,28 +112,36 @@ const stylesCardItem = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
+
     marginBottom: 10,
-    color: "white",
   },
   image: {
     width: "35%",
-    height: 150,
+    height: "100%",
     borderRadius: 10,
   },
   content: {
     height: "100%",
     width: "65%",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     alignItems: "flex-start",
     paddingVertical: 10,
-    color: "white",
+
     paddingHorizontal: 10,
     // backgroundColor: "rgba(255, 7, 7, 0.5)",
   },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+
   title: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "white",
+  },
+  text: {
     color: "white",
   },
 });

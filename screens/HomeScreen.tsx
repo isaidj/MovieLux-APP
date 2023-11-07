@@ -15,7 +15,8 @@ import {
   SparklesIcon,
 } from "react-native-heroicons/solid";
 import List from "../components/List";
-import Carrousel from "../components/Carrousel";
+import MainCarrousel from "../components/MainCarrousel";
+import { LinearGradient } from "expo-linear-gradient";
 
 const ios = Platform.OS === "ios";
 const HomeScreen = () => {
@@ -36,12 +37,13 @@ const HomeScreen = () => {
           />
         </BlurView>
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          // contentContainerStyle={{ paddingBottom: 30 }}
-        >
-          <Carrousel />
-          <List />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <MainCarrousel
+            title="Trending"
+            endpoint="/trending/all"
+            timeN="day"
+          />
+          <List title="Top Rated" endpoint="/movie/top_rated" />
         </ScrollView>
       </SafeAreaView>
     </View>
@@ -52,11 +54,11 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#363636",
+    backgroundColor: "#282828",
   },
+
   safeArea: {
-    //if ios is true
-    marginBottom: ios ? -20 : 30,
+    // marginBottom: ios ? -20 : 30,
   },
   menu_container: {
     width: "100%",
@@ -66,6 +68,11 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     paddingHorizontal: 10,
+    backgroundColor: "transparent",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    zIndex: 1,
     // opacity: 0.5,
   },
   logo: {
