@@ -5,13 +5,23 @@ import { StyleSheet } from "react-native";
 import { maxChars } from "../utils/textFunctions";
 import { getMoviesPopular } from "../utils/handleApi";
 import { useNavigation } from "@react-navigation/native";
+import { ArrowLeftIcon, ArrowRightIcon } from "react-native-heroicons/solid";
 
-const List = ({ title, endpoint }) => {
-  const [movies, setMovies] = useState([]);
-  const [time, setTime] = useState("day");
+const ListHorizontal = ({
+  title,
+  fetchFunction,
+}: {
+  title: string;
+  fetchFunction: Function;
+}) => {
+  const [movies, setMovies] = useState<any[]>([]);
   const navigation = useNavigation();
+  const handleCategoryPress = () => {
+    navigation.navigate("Category", {});
+  };
+
   const getMovies = async () => {
-    getMoviesPopular().then((res) => {
+    fetchFunction().then((res = { data: { results: [] } }) => {
       setMovies(res.data.results);
     });
   };
@@ -20,7 +30,15 @@ const List = ({ title, endpoint }) => {
   }, []);
   return (
     <View style={styles.list_container}>
-      <Text style={styles.title}>Popular Movies</Text>
+      <TouchableOpacity style={styles.category} onPress={handleCategoryPress}>
+        <Text style={styles.title}>{title}</Text>
+        <ArrowRightIcon
+          size={30}
+          color="#afafaf"
+          onPress={() => navigation.goBack()}
+          style={{ marginRight: 10 }}
+        />
+      </TouchableOpacity>
       {/* <ButtonsTime time={time} setTime={setTime} /> */}
 
       <FlatList
@@ -29,18 +47,21 @@ const List = ({ title, endpoint }) => {
           <CardItem key={index} item={item} navigation={navigation} />
         )}
         style={styles.list}
-        horizontal={false}
-        scrollEnabled={false}
+        horizontal={true}
+        // scrollEnabled={false}
       />
     </View>
   );
 };
-export default List;
+export default ListHorizontal;
 const styles = StyleSheet.create({
-  list_container: {},
+  list_container: {
+    height: 250,
+  },
   list: {
     marginTop: 10,
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
+    gap: 10,
   },
   title: {
     color: "white",
@@ -49,6 +70,11 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginTop: 10,
     marginBottom: 10,
+  },
+  category: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   buttons: {
     flexDirection: "row",
@@ -64,32 +90,11 @@ const styles = StyleSheet.create({
     color: "black",
   },
 });
-const ButtonsTime = ({ time, setTime }) => {
-  return (
-    <View style={styles.buttons}>
-      <TouchableOpacity
-        onPress={() => {
-          setTime("day");
-        }}
-        style={styles.button}
-      >
-        <Text>Day</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          setTime("week");
-        }}
-      >
-        <Text>Week</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
 
 const CardItem = ({ item, navigation }) => {
   const handlePress = () => {
-    navigation.navigate("Movie", {
+    console.log(item);
+    navigation.push("Movie", {
       item,
     });
   };
@@ -99,33 +104,24 @@ const CardItem = ({ item, navigation }) => {
         source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }}
         style={stylesCardItem.image}
       />
-      <View style={stylesCardItem.content}>
-        <Text style={stylesCardItem.title}>{item.title || item.name}</Text>
-        <View style={stylesCardItem.row}>
-          <Text style={stylesCardItem.text}>{item.vote_average}</Text>
-          <Text style={stylesCardItem.text}>{item.release_date}</Text>
-        </View>
-
-        <Text style={stylesCardItem.text}>{maxChars(item.overview, 120)}</Text>
-      </View>
     </TouchableOpacity>
   );
 };
 
 const stylesCardItem = StyleSheet.create({
   container: {
-    width: "100%",
-    height: 200,
     // backgroundColor: "white",
     borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-
+    backgroundColor: "rgba(34, 34, 34, 0.5)5)0.5)",
     marginBottom: 10,
+    marginHorizontal: 10,
   },
   image: {
-    width: "35%",
+    width: 150,
+
     height: "100%",
     borderRadius: 10,
   },
@@ -154,3 +150,25 @@ const stylesCardItem = StyleSheet.create({
     color: "white",
   },
 });
+const ButtonsTime = ({ time, setTime }) => {
+  return (
+    <View style={styles.buttons}>
+      <TouchableOpacity
+        onPress={() => {
+          setTime("day");
+        }}
+        style={styles.button}
+      >
+        <Text>Day</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          setTime("week");
+        }}
+      >
+        <Text>Week</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};

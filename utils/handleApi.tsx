@@ -47,7 +47,40 @@ export const getMoviesPopular = async ({
     console.error(error);
   }
 };
+export const getMoviesUpcoming = async () => {
+  const options = {
+    method: "GET",
+    url: `https://api.themoviedb.org/3/movie/upcoming`,
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  };
 
+  try {
+    const response = await axios.request(options);
+    //   console.log(response.data);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};
+export const getMoviesTopRated = async () => {
+  const options = {
+    method: "GET",
+    url: `https://api.themoviedb.org/3/movie/top_rated`,
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  };
+
+  try {
+    const response = await axios.request(options);
+    //   console.log(response.data);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};
 export const getMovie = async (id: number) => {
   const options = {
     method: "GET",
@@ -57,6 +90,40 @@ export const getMovie = async (id: number) => {
     },
   };
 
+  try {
+    const response = await axios.request(options);
+    //   console.log(response.data);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getRecommendations = async (id: number) => {
+  const options = {
+    method: "GET",
+    url: `https://api.themoviedb.org/3/movie/${id}/recommendations`,
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  };
+
+  try {
+    const response = await axios.request(options);
+    //   console.log(response.data);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};
+export const getSimilar = async (id: number) => {
+  const options = {
+    method: "GET",
+    url: `https://api.themoviedb.org/3/movie/${id}/similar`,
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  };
   try {
     const response = await axios.request(options);
     //   console.log(response.data);
