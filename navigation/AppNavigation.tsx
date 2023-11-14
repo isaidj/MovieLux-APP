@@ -1,52 +1,54 @@
 import * as React from "react";
-import { View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-// import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeScreen from "../screens/HomeScreen";
 import MovieScreen from "../screens/MovieScreen";
 import CategoryScreen from "../screens/CategoryScreen";
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+
 const defaultScreenOptions = {
   headerShown: false,
 };
-// const LeftDrawer = createDrawerNavigator();
 
-// const LeftDrawerScreen = () => {
-//   return (
-//     <LeftDrawer.Navigator screenOptions={{ drawerPosition: "left" }}>
-//       <LeftDrawer.Screen name="Home" component={HomeScreen} />
-//     </LeftDrawer.Navigator>
-//   );
-// };
+const HomeStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Category" component={CategoryScreen} />
+      <Stack.Screen
+        name="Movie"
+        options={{
+          animation: "slide_from_right",
+        }}
+        component={MovieScreen}
+      />
+    </Stack.Navigator>
+  );
+};
 
 export const AppNavigation = () => {
   return (
     <NavigationContainer>
-      {/* <LeftDrawerScreen /> */}
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          options={defaultScreenOptions}
-          component={HomeScreen}
-        />
-        <Stack.Screen
-          name="Category"
-          options={defaultScreenOptions}
-          component={CategoryScreen}
-        />
-        <Stack.Screen
-          name="Movie"
-          //animation + defaultScreenOptions
-          options={{
-            animation: "slide_from_right",
-
-            ...defaultScreenOptions,
-          }}
-          component={MovieScreen}
-        />
-      </Stack.Navigator>
+      <Drawer.Navigator
+        //todo lo que tiene defaultScreenOptions mas personalizado
+        screenOptions={{
+          headerShown: false,
+          drawerStyle: {
+            backgroundColor: "#282828",
+          },
+          drawerLabelStyle: {
+            color: "white",
+            fontWeight: "bold",
+          },
+        }}
+      >
+        <Drawer.Screen name="Home" component={HomeStack} />
+        <Drawer.Screen name="Category" component={CategoryScreen} />
+        {/* Agrega más Drawer.Screen según tus necesidades */}
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 };

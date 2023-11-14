@@ -87,7 +87,7 @@ const ButtonsTime = ({ time, setTime }) => {
   );
 };
 
-const CardItem = ({ item, navigation }) => {
+export const CardItem = ({ item, navigation }) => {
   const handlePress = () => {
     navigation.navigate("Movie", {
       item,

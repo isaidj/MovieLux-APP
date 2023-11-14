@@ -17,6 +17,7 @@ import ListHorizontal from "../components/ListHorizontal.tsx";
 const windowSize = Dimensions.get("window");
 
 function MovieScreen({ route, navigation }) {
+  console.log(route.params);
   const { item } = route.params;
   const [movie, setMovie] = useState(item);
   // console.log(item);
@@ -24,7 +25,7 @@ function MovieScreen({ route, navigation }) {
   console.log((Number(movie.vote_average) / 10).toFixed(2));
   useEffect(() => {
     getMovie(item.id).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setMovie(res.data);
     });
   }, []);
@@ -90,6 +91,9 @@ function MovieScreen({ route, navigation }) {
             </View>
             <Text style={styles.title}>{movie.title}</Text>
             <Text style={styles.overview}>{movie.overview}</Text>
+          </View>
+          <View style={styles.trailerContainer}>
+            <Youtube query_search={movie.title || movie.name} />
           </View>
 
           <ListHorizontal
@@ -157,6 +161,11 @@ const styles = StyleSheet.create({
     height: 80,
     marginTop: 10,
     overflow: "hidden",
+  },
+  trailerContainer: {
+    width: "100%",
+    height: 300,
+    marginTop: 20,
   },
 });
 

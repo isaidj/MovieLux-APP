@@ -4,17 +4,14 @@ import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
-  FlatList,
   Image,
   StyleSheet,
   Dimensions,
-  Animated,
   TouchableOpacity,
 } from "react-native";
 import useFetchMovies from "../hooks/useFetchMovies";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import Youtube from "./Youtube";
 
 const Dime: { width: number; height: number } = Dimensions.get("window");
 
@@ -135,6 +132,7 @@ const styles = StyleSheet.create({
 const CardItem = ({ item, navigation }) => {
   const [expanded, setExpanded] = useState(false);
   const handlePress = () => {
+    console.log("pressed");
     navigation.navigate("Movie", {
       item,
     });

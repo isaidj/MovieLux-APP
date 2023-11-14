@@ -20,9 +20,9 @@ const Youtube = ({ query_search }) => {
         );
         const primerVideoId = respuesta.data.items[0].id.videoId;
 
-        console.log("ID del primer video:", primerVideoId);
-        console.log("query_search:", query_search);
-        console.log("Respuesta:", respuesta.data.items[0].snippet.title);
+        // console.log("ID del primer video:", primerVideoId);
+        // console.log("query_search:", query_search);
+        // console.log("Respuesta:", respuesta.data.items[0].snippet.title);
         setVideoId(primerVideoId);
       } catch (error) {
         console.error("Error al obtener el ID del video:", error);
